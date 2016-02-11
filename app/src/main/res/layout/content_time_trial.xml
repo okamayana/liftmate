@@ -32,9 +32,12 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_view_reps"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -71,9 +74,11 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_view_sets"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -101,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:minEms="3"
-                    android:text="001/003"
+                    android:text="004/005"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp"/>
@@ -111,11 +116,13 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view_time"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/counter_container"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
