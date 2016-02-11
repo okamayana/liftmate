@@ -12,4 +12,6 @@
     <color name="material_green_dark">#ff1b5e20</color>
     <color name="material_amber">#ffc107</color>
     <color name="material_amber_dark">#FF6F00</color>
+    <color name="material_purple">#9C27B0</color>
+    <color name="material_purple_dark">#4A148C</color>
 </resources>

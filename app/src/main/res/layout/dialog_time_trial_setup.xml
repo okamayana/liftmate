@@ -41,7 +41,7 @@
         android:hint="Target time per set"
         android:inputType="number"/>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_start_workout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,6 +49,7 @@
         android:layout_below="@id/target_time_input"
         android:layout_marginTop="15dp"
         android:padding="16dp"
-        android:text="Start workout"/>
+        android:text="Start workout"
+        android:theme="@style/LiftmateButtonGreen"/>
 
 </RelativeLayout>

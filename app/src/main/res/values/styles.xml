@@ -39,4 +39,10 @@
         <item name="colorControlHighlight">@color/material_amber_dark</item>
     </style>
 
+    <!-- Purple button style -->
+    <style name="LiftmateButtonPurple" parent="LiftmateButton">
+        <item name="colorButtonNormal">@color/material_purple</item>
+        <item name="colorControlHighlight">@color/material_purple_dark</item>
+    </style>
+
 </resources>
