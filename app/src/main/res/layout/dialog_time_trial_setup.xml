@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time Trial Setup"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/target_sets_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_title"
+        android:layout_marginTop="10dp"
+        android:hint="Target sets"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/target_reps_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/target_sets_input"
+        android:layout_marginTop="5dp"
+        android:hint="Target reps per set"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/target_time_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/target_reps_input"
+        android:layout_marginTop="5dp"
+        android:hint="Target time per set"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/btn_start_workout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/target_time_input"
+        android:layout_marginTop="15dp"
+        android:padding="16dp"
+        android:text="Start workout"/>
+
+</RelativeLayout>

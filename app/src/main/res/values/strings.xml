@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Liftmate</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="main_menu_time_trial">Time trial mode</string>
+    <string name="main_menu_free_style">Free style mode</string>
+</resources>
