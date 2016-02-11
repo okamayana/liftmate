@@ -5,4 +5,11 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="background_light_grey">#e5e5e5</color>
+
+    <color name="material_red">#fff44336</color>
+    <color name="material_red_dark">#990000</color>
+    <color name="material_green">#ff4caf50</color>
+    <color name="material_green_dark">#ff1b5e20</color>
+    <color name="material_amber">#ffc107</color>
+    <color name="material_amber_dark">#FF6F00</color>
 </resources>

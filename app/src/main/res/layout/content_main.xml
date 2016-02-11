@@ -18,7 +18,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="Select a mode"
+        android:text="Start working out"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="14sp"

@@ -14,4 +14,29 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <!-- Primary button theme -->
+    <style name="LiftmateButton" parent="Widget.AppCompat.Button">
+        <item name="android:padding">15dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Red button style -->
+    <style name="LiftmateButtonRed" parent="LiftmateButton">
+        <item name="colorButtonNormal">@color/material_red</item>
+        <item name="colorControlHighlight">@color/material_red_dark</item>
+    </style>
+
+    <!-- Green button style -->
+    <style name="LiftmateButtonGreen" parent="LiftmateButton">
+        <item name="colorButtonNormal">@color/material_green</item>
+        <item name="colorControlHighlight">@color/material_green_dark</item>
+    </style>
+
+    <!-- Amber button style -->
+    <style name="LiftmateButtonAmber" parent="LiftmateButton">
+        <item name="colorButtonNormal">@color/material_amber</item>
+        <item name="colorControlHighlight">@color/material_amber_dark</item>
+    </style>
+
 </resources>

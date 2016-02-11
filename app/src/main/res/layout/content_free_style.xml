@@ -115,17 +115,19 @@
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Reset"/>
+            android:text="Reset"
+            android:theme="@style/LiftmateButtonRed"/>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Pause"/>
+            android:text="Pause"
+            android:theme="@style/LiftmateButtonAmber"/>
 
     </LinearLayout>
 
