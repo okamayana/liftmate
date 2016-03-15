@@ -78,6 +78,10 @@ public class BluetoothDeviceAdapter extends Adapter<BluetoothDeviceViewHolder> {
         }
     }
 
+    public void clear() {
+        mItems.clear();
+    }
+
     private void startWorkoutActivity(BluetoothDevice device) {
         switch (mMainMenuItem) {
             case TIME_TRIAL_MODE:

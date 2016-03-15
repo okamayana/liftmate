@@ -28,7 +28,7 @@ public class BluetoothSearchActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDiscoveryReceiver mDiscoveryReceiver;
 
-    private BluetoothDeviceAdapter mDeviceAdapter;
+    private BluetoothDeviceAdapter mDeviceListAdapter;
 
     public static void start(Context context, MainMenuItem mainMenuItem) {
         Intent intent = new Intent(context, BluetoothSearchActivity.class);
@@ -47,19 +47,21 @@ public class BluetoothSearchActivity extends AppCompatActivity {
         MainMenuItem mainMenuItem = (MainMenuItem) getIntent().getSerializableExtra(
                 EXTRA_MAIN_MENU_ITEM);
 
-        mDeviceAdapter = new BluetoothDeviceAdapter(BluetoothSearchActivity.this, mainMenuItem);
+        mDeviceListAdapter = new BluetoothDeviceAdapter(BluetoothSearchActivity.this, mainMenuItem);
         RecyclerView deviceList = (RecyclerView) findViewById(R.id.bluetooth_list);
-        deviceList.setAdapter(mDeviceAdapter);
+        deviceList.setAdapter(mDeviceListAdapter);
         deviceList.setLayoutManager(new LinearLayoutManager(BluetoothSearchActivity.this));
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         mDiscoveryReceiver = new BluetoothDiscoveryReceiver();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        mDeviceListAdapter.clear();
+        mDeviceListAdapter.notifyDataSetChanged();
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -98,11 +100,11 @@ public class BluetoothSearchActivity extends AppCompatActivity {
                 updateDiscoveryStatusView(false);
             } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                mDeviceListAdapter.add(device);
+                mDeviceListAdapter.notifyDataSetChanged();
+
                 Log.d(LOG_TAG, "found device: " + device.getName()
                         + " @ (" + device.getAddress() + ")");
-
-                mDeviceAdapter.add(device);
-                mDeviceAdapter.notifyDataSetChanged();
             }
         }
     }
