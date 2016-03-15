@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.github.okamayana.liftmate.R;
-import com.github.okamayana.liftmate.ui.adapters.BluetoothDeviceAdapter;
+import com.github.okamayana.liftmate.ui.adapters.BluetoothDeviceListAdapter;
 import com.github.okamayana.liftmate.ui.adapters.MainMenuAdapter.MainMenuItem;
 
 public class BluetoothSearchActivity extends AppCompatActivity {
@@ -28,7 +28,7 @@ public class BluetoothSearchActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDiscoveryReceiver mDiscoveryReceiver;
 
-    private BluetoothDeviceAdapter mDeviceListAdapter;
+    private BluetoothDeviceListAdapter mDeviceListAdapter;
 
     public static void start(Context context, MainMenuItem mainMenuItem) {
         Intent intent = new Intent(context, BluetoothSearchActivity.class);
@@ -47,7 +47,7 @@ public class BluetoothSearchActivity extends AppCompatActivity {
         MainMenuItem mainMenuItem = (MainMenuItem) getIntent().getSerializableExtra(
                 EXTRA_MAIN_MENU_ITEM);
 
-        mDeviceListAdapter = new BluetoothDeviceAdapter(BluetoothSearchActivity.this, mainMenuItem);
+        mDeviceListAdapter = new BluetoothDeviceListAdapter(BluetoothSearchActivity.this, mainMenuItem);
         RecyclerView deviceList = (RecyclerView) findViewById(R.id.bluetooth_list);
         deviceList.setAdapter(mDeviceListAdapter);
         deviceList.setLayoutManager(new LinearLayoutManager(BluetoothSearchActivity.this));

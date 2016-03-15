@@ -11,9 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="f8fdb1c2-3fe0-4dfd-8e4c-93579eaff8d4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/net/BluetoothThread.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/net/BluetoothThread.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/BluetoothSearchActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/BluetoothSearchActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/FreeStyleActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/FreeStyleActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceAdapter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceListAdapter.java" />
     </list>
     <ignored path="Liftmate.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,11 +67,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="BluetoothThread.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="BluetoothThread.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/net/BluetoothThread.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.44049734">
-                  <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="79" column="74" selection-start-line="79" selection-start-column="74" selection-end-line="79" selection-end-column="74" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -94,7 +95,7 @@
             <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/BluetoothSearchActivity.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="108" column="8" selection-start-line="108" selection-start-column="8" selection-end-line="108" selection-end-column="8" />
+                  <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -102,17 +103,17 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="BluetoothDeviceAdapter.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceAdapter.java">
+          <file leaf-file-name="BluetoothDeviceListAdapter.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceListAdapter.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="81" column="23" selection-start-line="81" selection-start-column="23" selection-end-line="81" selection-end-column="23" />
+                <state vertical-scroll-proportion="2.1634102">
+                  <caret line="58" column="47" selection-start-line="58" selection-start-column="47" selection-end-line="58" selection-end-column="47" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#2474#2475#0" expanded="true" />
-                    <element signature="e#2510#2511#0" expanded="true" />
-                    <element signature="e#2672#2673#0" expanded="true" />
-                    <element signature="e#2702#2703#0" expanded="true" />
+                    <element signature="e#2619#2620#0" expanded="true" />
+                    <element signature="e#2655#2656#0" expanded="true" />
+                    <element signature="e#2817#2818#0" expanded="true" />
+                    <element signature="e#2847#2848#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -122,10 +123,10 @@
             <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/FreeStyleActivity.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="34" column="38" selection-start-line="34" selection-start-column="38" selection-end-line="34" selection-end-column="38" />
+                  <caret line="22" column="61" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
                   <folding>
-                    <element signature="e#1781#1782#0" expanded="true" />
-                    <element signature="e#1840#1841#0" expanded="true" />
+                    <element signature="e#1842#1843#0" expanded="true" />
+                    <element signature="e#1903#1904#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -166,7 +167,7 @@
           <file leaf-file-name="MainMenuAdapter.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/MainMenuAdapter.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="1.4103019">
+                <state vertical-scroll-proportion="-0.19360569">
                   <caret line="76" column="92" selection-start-line="76" selection-start-column="92" selection-end-line="76" selection-end-column="92" />
                   <folding />
                 </state>
@@ -1784,11 +1785,12 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/content_bluetooth_search.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/TimeTrialActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/fragments/TimeTrialSetupDialogFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/BluetoothSearchActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/net/BluetoothConnection.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/FreeStyleActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/net/BluetoothThread.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/FreeStyleActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceListAdapter.java" />
       </list>
     </option>
   </component>
@@ -2732,7 +2734,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/MainMenuAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.4103019">
+        <state vertical-scroll-proportion="-0.19360569">
           <caret line="76" column="92" selection-start-line="76" selection-start-column="92" selection-end-line="76" selection-end-column="92" />
           <folding />
         </state>
@@ -2865,20 +2867,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="81" column="23" selection-start-line="81" selection-start-column="23" selection-end-line="81" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2474#2475#0" expanded="true" />
-            <element signature="e#2510#2511#0" expanded="true" />
-            <element signature="e#2672#2673#0" expanded="true" />
-            <element signature="e#2702#2703#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/TimeTrialActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2892,7 +2880,17 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/BluetoothSearchActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="108" column="8" selection-start-line="108" selection-start-column="8" selection-end-line="108" selection-end-column="8" />
+          <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/net/BluetoothThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="79" column="74" selection-start-line="79" selection-start-column="74" selection-end-line="79" selection-end-column="74" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -2902,20 +2900,24 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/activities/FreeStyleActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="38" selection-start-line="34" selection-start-column="38" selection-end-line="34" selection-end-column="38" />
+          <caret line="22" column="61" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
           <folding>
-            <element signature="e#1781#1782#0" expanded="true" />
-            <element signature="e#1840#1841#0" expanded="true" />
+            <element signature="e#1842#1843#0" expanded="true" />
+            <element signature="e#1903#1904#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/net/BluetoothThread.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/github/okamayana/liftmate/ui/adapters/BluetoothDeviceListAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44049734">
-          <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+        <state vertical-scroll-proportion="2.1634102">
+          <caret line="58" column="47" selection-start-line="58" selection-start-column="47" selection-end-line="58" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2619#2620#0" expanded="true" />
+            <element signature="e#2655#2656#0" expanded="true" />
+            <element signature="e#2817#2818#0" expanded="true" />
+            <element signature="e#2847#2848#0" expanded="true" />
           </folding>
         </state>
       </provider>

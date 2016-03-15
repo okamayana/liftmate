@@ -18,6 +18,8 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
 
     public static final String EXTRA_BLUETOOTH_DEVICE = "extra_bluetooth_device";
 
+    public static final String LOG_TAG = "FreeStyleActivity";
+
     public static void start(Context context, BluetoothDevice device) {
         Intent intent = new Intent(context, FreeStyleActivity.class);
         intent.putExtra(EXTRA_BLUETOOTH_DEVICE, device);
@@ -47,7 +49,7 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
     }
 
     @Override
-    public void onReceiveData(byte[] data) {
-        Log.d("FreeStyleActivity", "onReceiveData");
+    public void onReceiveData(char data) {
+        Log.d(LOG_TAG, "Received character: " + data);
     }
 }

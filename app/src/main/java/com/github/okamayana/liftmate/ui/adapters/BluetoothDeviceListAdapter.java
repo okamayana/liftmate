@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,14 +14,14 @@ import android.widget.TextView;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.ui.activities.FreeStyleActivity;
-import com.github.okamayana.liftmate.ui.adapters.BluetoothDeviceAdapter.BluetoothDeviceViewHolder;
+import com.github.okamayana.liftmate.ui.adapters.BluetoothDeviceListAdapter.BluetoothDeviceViewHolder;
 import com.github.okamayana.liftmate.ui.adapters.MainMenuAdapter.MainMenuItem;
 import com.github.okamayana.liftmate.ui.fragments.TimeTrialSetupDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BluetoothDeviceAdapter extends Adapter<BluetoothDeviceViewHolder> {
+public class BluetoothDeviceListAdapter extends Adapter<BluetoothDeviceViewHolder> {
 
     public static class BluetoothDeviceViewHolder extends ViewHolder {
 
@@ -39,7 +40,7 @@ public class BluetoothDeviceAdapter extends Adapter<BluetoothDeviceViewHolder> {
     private List<BluetoothDevice> mItems;
     private MainMenuItem mMainMenuItem;
 
-    public BluetoothDeviceAdapter(Context context, MainMenuItem mainMenuItem) {
+    public BluetoothDeviceListAdapter(Context context, MainMenuItem mainMenuItem) {
         mContext = context;
         mItems = new ArrayList<>();
         mMainMenuItem = mainMenuItem;
@@ -57,7 +58,12 @@ public class BluetoothDeviceAdapter extends Adapter<BluetoothDeviceViewHolder> {
     public void onBindViewHolder(BluetoothDeviceViewHolder holder, int position) {
         final BluetoothDevice device = mItems.get(position);
 
-        holder.nameView.setText(device.getName());
+        String name = device.getName();
+        if (TextUtils.isEmpty(name)) {
+            name = "?";
+        }
+        holder.nameView.setText(name);
+
         holder.macAddressView.setText(device.getAddress());
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override

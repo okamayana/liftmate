@@ -4,9 +4,12 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
@@ -47,14 +50,18 @@ public class BluetoothThread implements Runnable {
 
     @Override
     public void run() {
-        byte[] buffer = new byte[1024];
-        int bytes;
+        InputStreamReader reader = new InputStreamReader(mInputStream);
+        BufferedReader buffer = new BufferedReader(reader);
+        int c;
 
         mRunning = true;
         while (mRunning) {
             try {
-                bytes = mInputStream.read(buffer);
-                mHandler.obtainMessage(INCOMING_BYTES, bytes, -1, buffer).sendToTarget();
+                c = buffer.read();
+                if (c != -1) {
+                    char character = (char) c;
+                    mHandler.obtainMessage(INCOMING_BYTES, character).sendToTarget();
+                }
             } catch (IOException e) {
                 stop();
                 e.printStackTrace();
@@ -67,8 +74,10 @@ public class BluetoothThread implements Runnable {
 
         try {
             mSocket.close();
+            Log.d(LOG_TAG, "thread shutting down");
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e(LOG_TAG, "thread unable to shutdown: " + e.getMessage());
         }
     }
 
@@ -92,12 +101,12 @@ public class BluetoothThread implements Runnable {
         public void handleMessage(Message msg) {
             BluetoothThreadListener listener = mListenerWeakRef.get();
             if (listener != null) {
-                listener.onReceiveData((byte[]) msg.obj);
+                listener.onReceiveData((char) msg.obj);
             }
         }
     }
 
     public interface BluetoothThreadListener {
-        void onReceiveData(byte[] data);
+        void onReceiveData(char data);
     }
 }
