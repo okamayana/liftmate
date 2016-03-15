@@ -23,20 +23,20 @@
             android:padding="15dp">
 
             <TextView
-                android:id="@+id/menu_text"
+                android:id="@+id/bluetooth_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="Time trial mode"/>
+                tools:text="FlexBT"/>
 
             <TextView
-                android:id="@+id/menu_description"
+                android:id="@+id/bluetooth_mac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                tools:text=""/>
+                android:layout_marginTop="5dp"
+                tools:text="20:15:10:08:43:94"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

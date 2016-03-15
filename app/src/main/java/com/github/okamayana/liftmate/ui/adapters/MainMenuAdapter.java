@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.okamayana.liftmate.R;
+import com.github.okamayana.liftmate.ui.activities.BluetoothSearchActivity;
 import com.github.okamayana.liftmate.ui.activities.FreeStyleActivity;
 import com.github.okamayana.liftmate.ui.adapters.MainMenuAdapter.MainMenuViewHolder;
 import com.github.okamayana.liftmate.ui.fragments.TimeTrialSetupDialogFragment;
@@ -21,24 +22,28 @@ import java.util.List;
 public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
 
     public enum MainMenuItem {
-        TIME_TRIAL_MODE(R.string.main_menu_time_trial),
-        FREE_STYLE_MODE(R.string.main_menu_free_style);
+        TIME_TRIAL_MODE(R.string.main_menu_time_trial, R.string.main_menu_time_trial_desc),
+        FREE_STYLE_MODE(R.string.main_menu_free_style, R.string.main_menu_free_style_desc);
 
-        public int stringResId;
+        public int titleResId;
+        public int descResId;
 
-        MainMenuItem(int stringResId) {
-            this.stringResId = stringResId;
+        MainMenuItem(int titleResId, int descResId) {
+            this.titleResId = titleResId;
+            this.descResId = descResId;
         }
     }
 
     public static class MainMenuViewHolder extends ViewHolder {
 
         TextView menuTextView;
+        TextView menuDescTextView;
 
         public MainMenuViewHolder(View itemView) {
             super(itemView);
 
             menuTextView = (TextView) itemView.findViewById(R.id.menu_text);
+            menuDescTextView = (TextView) itemView.findViewById(R.id.menu_description);
         }
     }
 
@@ -60,7 +65,7 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
                 listener = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showTimeTrialSetupDialog();
+                        BluetoothSearchActivity.start(mContext, MainMenuItem.TIME_TRIAL_MODE);
                     }
                 };
                 break;
@@ -69,7 +74,7 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
                 listener = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FreeStyleActivity.start(mContext);
+                        BluetoothSearchActivity.start(mContext, MainMenuItem.FREE_STYLE_MODE);
                     }
                 };
                 break;
@@ -82,17 +87,12 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
         return new MainMenuViewHolder(view);
     }
 
-    private void showTimeTrialSetupDialog() {
-        TimeTrialSetupDialogFragment setupDialog =
-                TimeTrialSetupDialogFragment.newInstance();
-        setupDialog.show(((AppCompatActivity) mContext).getSupportFragmentManager(),
-                null);
-    }
-
     @Override
     public void onBindViewHolder(MainMenuViewHolder viewHolder, int position) {
         MainMenuItem menuItem = mItems.get(position);
-        viewHolder.menuTextView.setText(menuItem.stringResId);
+
+        viewHolder.menuTextView.setText(menuItem.titleResId);
+        viewHolder.menuDescTextView.setText(menuItem.descResId);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.github.okamayana.liftmate.ui.fragments;
 
-import android.content.Context;
-import android.content.DialogInterface;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -10,30 +9,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.github.okamayana.liftmate.R;
-import com.github.okamayana.liftmate.ui.activities.FreeStyleActivity;
 import com.github.okamayana.liftmate.ui.activities.TimeTrialActivity;
 
 public class TimeTrialSetupDialogFragment extends AppCompatDialogFragment {
 
-    public static TimeTrialSetupDialogFragment newInstance() {
-        return new TimeTrialSetupDialogFragment();
+    public static final String EXTRA_BLUETOOTH_DEVICE = "extra_bluetooth_device";
+
+    public static TimeTrialSetupDialogFragment newInstance(BluetoothDevice device) {
+        TimeTrialSetupDialogFragment dialogFragment = new TimeTrialSetupDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_BLUETOOTH_DEVICE, device);
+        dialogFragment.setArguments(bundle);
+
+        return dialogFragment;
     }
 
     private EditText mTargetSetsEdit;
     private EditText mTargetRepsEdit;
     private EditText mTargetTimeEdit;
 
-    private Button mStartButton;
+    private BluetoothDevice mBluetoothDevice;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mBluetoothDevice = getArguments().getParcelable(EXTRA_BLUETOOTH_DEVICE);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
@@ -49,15 +54,13 @@ public class TimeTrialSetupDialogFragment extends AppCompatDialogFragment {
         mTargetSetsEdit = (EditText) view.findViewById(R.id.target_sets_input);
         mTargetRepsEdit = (EditText) view.findViewById(R.id.target_reps_input);
         mTargetTimeEdit = (EditText) view.findViewById(R.id.target_time_input);
-        mStartButton = (Button) view.findViewById(R.id.btn_start_workout);
 
-        mStartButton.setOnClickListener(new OnClickListener() {
+        Button startButton = (Button) view.findViewById(R.id.btn_start_workout);
+        startButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateInput()) {
-                    dismiss();
-                    TimeTrialActivity.start(getActivity());
-                }
+                dismiss();
+                TimeTrialActivity.start(getActivity(), mBluetoothDevice);
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.github.okamayana.liftmate.ui.activities;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +15,11 @@ import com.github.okamayana.liftmate.ui.adapters.SetAdapter;
 
 public class TimeTrialActivity extends AppCompatActivity {
 
-    public static void start(Context context) {
+    public static final String EXTRA_BLUETOOTH_DEVICE = "extra_bluetooth_device";
+
+    public static void start(Context context, BluetoothDevice device) {
         Intent intent = new Intent(context, TimeTrialActivity.class);
+        intent.putExtra(EXTRA_BLUETOOTH_DEVICE, device);
         context.startActivity(intent);
     }
 

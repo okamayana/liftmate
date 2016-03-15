@@ -29,7 +29,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -72,7 +72,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -112,7 +112,7 @@
         android:layout_below="@id/card_view_time"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatButton

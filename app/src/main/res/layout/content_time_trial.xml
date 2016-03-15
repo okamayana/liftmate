@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/your_progress"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -123,7 +123,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_view_reps"
                 android:layout_centerHorizontal="true"
-                android:text="Elapsed time"
+                android:text="Time remaining"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="26sp"
@@ -150,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="00:05:04.99"
+                android:text="00:00:03.28"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="26sp"/>
@@ -196,7 +196,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -208,7 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/set_number_label"
