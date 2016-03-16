@@ -21,9 +21,9 @@ public class TimeTrialSetupDialogFragment extends AppCompatDialogFragment {
 
     public static TimeTrialSetupDialogFragment newInstance(BluetoothDevice device) {
         TimeTrialSetupDialogFragment dialogFragment = new TimeTrialSetupDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_BLUETOOTH_DEVICE, device);
-        dialogFragment.setArguments(bundle);
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_BLUETOOTH_DEVICE, device);
+        dialogFragment.setArguments(args);
 
         return dialogFragment;
     }

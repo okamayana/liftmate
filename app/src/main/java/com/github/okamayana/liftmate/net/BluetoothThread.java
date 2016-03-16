@@ -50,6 +50,8 @@ public class BluetoothThread implements Runnable {
 
     @Override
     public void run() {
+        Log.d(LOG_TAG, "thread started");
+
         InputStreamReader reader = new InputStreamReader(mInputStream);
         BufferedReader buffer = new BufferedReader(reader);
         int c;
@@ -70,6 +72,8 @@ public class BluetoothThread implements Runnable {
     }
 
     public void stop() {
+        if (!mRunning) return;
+
         mRunning = false;
 
         try {

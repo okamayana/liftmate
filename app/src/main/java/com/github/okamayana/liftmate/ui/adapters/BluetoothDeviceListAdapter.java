@@ -40,10 +40,14 @@ public class BluetoothDeviceListAdapter extends Adapter<BluetoothDeviceViewHolde
     private List<BluetoothDevice> mItems;
     private MainMenuItem mMainMenuItem;
 
-    public BluetoothDeviceListAdapter(Context context, MainMenuItem mainMenuItem) {
+    private BluetoothSelectListener mDeviceSelectListener;
+
+    public BluetoothDeviceListAdapter(Context context, MainMenuItem mainMenuItem,
+                                      BluetoothSelectListener deviceSelectListener) {
         mContext = context;
         mItems = new ArrayList<>();
         mMainMenuItem = mainMenuItem;
+        mDeviceSelectListener = deviceSelectListener;
     }
 
     @Override
@@ -98,6 +102,10 @@ public class BluetoothDeviceListAdapter extends Adapter<BluetoothDeviceViewHolde
                 FreeStyleActivity.start(mContext, device);
                 break;
         }
+
+        if (mDeviceSelectListener != null) {
+            mDeviceSelectListener.onBluetoothSelect();
+        }
     }
 
     private void showTimeTrialSetupDialog(BluetoothDevice device) {
@@ -105,5 +113,9 @@ public class BluetoothDeviceListAdapter extends Adapter<BluetoothDeviceViewHolde
                 TimeTrialSetupDialogFragment.newInstance(device);
         setupDialog.show(((AppCompatActivity) mContext).getSupportFragmentManager(),
                 null);
+    }
+
+    public interface BluetoothSelectListener {
+        void onBluetoothSelect();
     }
 }

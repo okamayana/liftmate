@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:minEms="3"
-                android:text="003"
+                android:text="000"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="26sp"/>
@@ -94,12 +94,11 @@
                 android:textSize="26sp"
                 android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/current_time_view"
+            <Chronometer
+                android:id="@+id/chronometer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="00:05:04.99"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="26sp"/>
@@ -116,6 +115,7 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_reset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -123,13 +123,15 @@
             android:theme="@style/LiftmateButtonRed"/>
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_play_pause"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Pause"
-            android:theme="@style/LiftmateButtonAmber"/>
+            android:text="Start"
+            android:theme="@style/LiftmateButtonGreen"/>
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_done"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

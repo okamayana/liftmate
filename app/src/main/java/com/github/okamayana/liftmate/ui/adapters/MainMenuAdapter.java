@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.okamayana.liftmate.R;
-import com.github.okamayana.liftmate.ui.activities.BluetoothSearchActivity;
 import com.github.okamayana.liftmate.ui.activities.FreeStyleActivity;
 import com.github.okamayana.liftmate.ui.adapters.MainMenuAdapter.MainMenuViewHolder;
-import com.github.okamayana.liftmate.ui.fragments.TimeTrialSetupDialogFragment;
+import com.github.okamayana.liftmate.ui.fragments.BluetoothSearchDialogFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +64,7 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
                 listener = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        BluetoothSearchActivity.start(mContext, MainMenuItem.TIME_TRIAL_MODE);
+                        showBluetoothSearchDialog(MainMenuItem.TIME_TRIAL_MODE);
                     }
                 };
                 break;
@@ -74,7 +73,7 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
                 listener = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        BluetoothSearchActivity.start(mContext, MainMenuItem.FREE_STYLE_MODE);
+                        showBluetoothSearchDialog(MainMenuItem.FREE_STYLE_MODE);
                     }
                 };
                 break;
@@ -93,6 +92,12 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
 
         viewHolder.menuTextView.setText(menuItem.titleResId);
         viewHolder.menuDescTextView.setText(menuItem.descResId);
+    }
+
+    private void showBluetoothSearchDialog(MainMenuItem mainMenuItem) {
+        BluetoothSearchDialogFragment dialog = BluetoothSearchDialogFragment.newInstance(
+                mainMenuItem);
+        dialog.show(((AppCompatActivity) mContext).getSupportFragmentManager(), null);
     }
 
     @Override
