@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.github.okamayana.liftmate.R;
@@ -23,7 +25,7 @@ import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadHandler;
 import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadListener;
 
 public class FreeStyleActivity extends AppCompatActivity implements BluetoothThreadListener,
-        OnClickListener {
+        OnClickListener, OnSeekBarChangeListener {
 
     public static final String EXTRA_BLUETOOTH_DEVICE = "extra_bluetooth_device";
 
@@ -38,11 +40,15 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
     private BluetoothThread mBluetoothThread;
 
     private int mRepCount;
-    private long mTimerMillis;
+    private long mTimePaused;
 
     private Chronometer mChronometer;
     private TextView mRepCountView;
+    private TextView mPushResistanceView;
+    private TextView mPullResistanceView;
     private Button mPlayPauseButton;
+
+    private SeekBar mResistanceSlider;
 
     private boolean mPaused = false;
     private boolean mStarted = false;
@@ -71,34 +77,59 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
         Button doneButton = (Button) findViewById(R.id.btn_done);
         doneButton.setOnClickListener(FreeStyleActivity.this);
 
+        mResistanceSlider = (SeekBar) findViewById(R.id.resistance_slider);
+        mResistanceSlider.setOnSeekBarChangeListener(FreeStyleActivity.this);
+
+        mPullResistanceView = (TextView) findViewById(R.id.pull_resistance_view);
+        mPushResistanceView = (TextView) findViewById(R.id.push_resistance_view);
+
+        int initialProgress = mResistanceSlider.getProgress();
+        mPushResistanceView.setText(String.valueOf(initialProgress - 2));
+        mPullResistanceView.setText(String.valueOf(initialProgress + 2));
+
         mRepCount = 0;
-        mTimerMillis = 0;
+        mTimePaused = 0;
+
+        new Thread(mBluetoothThread).start();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         mBluetoothThread.stop();
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        int pushResistance = progress - 2;
+        mPushResistanceView.setText(String.valueOf(pushResistance));
+
+        int pullResistance = progress + 2;
+        mPullResistanceView.setText(String.valueOf(pullResistance));
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        String resistanceStr = String.valueOf(mResistanceSlider.getProgress());
+        Log.d(LOG_TAG, "Sending resistance value: " + resistanceStr);
+        mBluetoothThread.write(resistanceStr.getBytes());
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_reset:
-                mBluetoothThread.stop();
                 resetWorkout();
                 break;
 
             case R.id.btn_play_pause:
                 if (!mStarted) {
-                    new Thread(mBluetoothThread).start();
-                    startWorkout();
+                    startWorkout();         // start button
                 } else {
                     if (!mPaused) {
-                        mBluetoothThread.stop();
-                        pauseWorkout();
+                        pauseWorkout();     // pause button
                     } else {
-                        resumeWorkout();
+                        resumeWorkout();    // resume button
                     }
                 }
                 break;
@@ -112,6 +143,7 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
         mStarted = false;
         mPaused = false;
 
+        mTimePaused = 0;
         mRepCount = 0;
         mRepCountView.setText(String.valueOf(mRepCount));
 
@@ -127,16 +159,19 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
 
         mPlayPauseButton.setText("Pause");
         mStarted = true;
+        mPaused = false;
     }
 
     private void pauseWorkout() {
         mPlayPauseButton.setText("Resume");
+        mTimePaused = mChronometer.getBase() - SystemClock.elapsedRealtime();
         mChronometer.stop();
         mPaused = true;
     }
 
     private void resumeWorkout() {
         mPlayPauseButton.setText("Pause");
+        mChronometer.setBase(SystemClock.elapsedRealtime() + mTimePaused);
         mChronometer.start();
         mPaused = false;
     }
@@ -152,4 +187,7 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
             }
         }
     }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {}
 }

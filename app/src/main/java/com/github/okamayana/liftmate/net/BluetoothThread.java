@@ -22,6 +22,7 @@ public class BluetoothThread implements Runnable {
     public static final String LOG_TAG = "BluetoothThread";
 
     private BluetoothSocket mSocket;
+
     private final InputStream mInputStream;
     private final OutputStream mOutputStream;
 
@@ -72,8 +73,6 @@ public class BluetoothThread implements Runnable {
     }
 
     public void stop() {
-        if (!mRunning) return;
-
         mRunning = false;
 
         try {
