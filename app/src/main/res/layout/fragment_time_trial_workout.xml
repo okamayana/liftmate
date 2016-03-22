@@ -155,11 +155,11 @@
             android:theme="@style/LiftmateButtonGreen"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_done"
+            android:id="@+id/btn_quit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Done"
+            android:text="Quit"
             android:theme="@style/LiftmateButtonPrimary"/>
     </LinearLayout>
 

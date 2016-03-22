@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.google.CountdownChronometer;
@@ -56,8 +54,6 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
     private long mTimeInSet;
     private long mTargetSetTime;
-    private int mMinutesPerSet;
-    private int mSecondsPerSet;
 
     private TextView mRepsView;
     private TextView mSetsView;
@@ -70,8 +66,24 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
     private long mTimePaused;
 
     private String mResetDialogTitle = "Confirm workout reset";
-    private String mResetDialogText = "Are you sure you want to reset your workout? This will erase all workout progress";
+    private String mResetDialogText = "Are you sure you want to reset your workout? This will erase all workout progress.";
     private ConfirmationDialogFragment mResetDialog;
+
+    private String mQuitDialogTitle = "Confirm workout exit";
+    private String mQuitDialogText = "Are you sure you want to leave your workout? This will erase all workout progress.";
+    private ConfirmationDialogFragment mQuitDialog;
+
+    private String mSuccessDialogTitle = "Time trial challenge complete";
+    private String mSuccessDialogText = "Congratulations! You have successfully completed your Time Trial workout challenge! You may choose to save your workout, or go back to the home screen.";
+    private String mSuccessDialogConfirmText = "Retry";
+    private String mSuccessDialogCancelText = "Save and leave";
+    private ConfirmationDialogFragment mSuccessDialog;
+
+    private String mFailDialogTitle = "Time trial challenge failed";
+    private String mFailDialogText = "Unfortunately, you were not able to successfully complete your Time Trial workout challenge. You may choose to retry the challenge, or go back to the home screen.";
+    private String mFailDialogConfirmText = "Retry";
+    private String mFailDialogCancelText = "Leave";
+    private ConfirmationDialogFragment mFailDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,19 +98,25 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         int targetMinsPerSet = args.getInt(EXTRA_MINS_PER_SET);
         int targetSecsPerSet = args.getInt(EXTRA_SECS_PER_SET);
 
-        mMinutesPerSet = targetMinsPerSet;
-        mSecondsPerSet = targetSecsPerSet;
-
-        mTargetSetTime = (long) mMinutesPerSet * 60L * 1000L + (long) mSecondsPerSet * 1000L;
+        mTargetSetTime = (long) targetMinsPerSet * 60L * 1000L + (long) targetSecsPerSet * 1000L;
         mTimeInSet = mTargetSetTime;
 
         mStarted = false;
         mPaused = false;
 
         mResetDialog = new ConfirmationDialogFragment();
-        mResetDialog.setOnConfirmationDialogFragmentListener(TimeTrialWorkoutFragment.this);
-        mResetDialog.setDialogTitle(mResetDialogTitle);
-        mResetDialog.setDialogText(mResetDialogText);
+        setupSimpleConfirmationDialog(mResetDialog, mResetDialogTitle, mResetDialogText);
+
+        mQuitDialog = new ConfirmationDialogFragment();
+        setupSimpleConfirmationDialog(mQuitDialog, mQuitDialogTitle, mQuitDialogText);
+
+        mSuccessDialog = new ConfirmationDialogFragment();
+        setupConfirmationDialog(mSuccessDialog, mSuccessDialogTitle, mSuccessDialogText,
+                mSuccessDialogConfirmText, mSuccessDialogCancelText);
+
+        mFailDialog = new ConfirmationDialogFragment();
+        setupConfirmationDialog(mFailDialog, mFailDialogTitle, mFailDialogText,
+                mFailDialogConfirmText, mFailDialogCancelText);
     }
 
     @Nullable
@@ -123,6 +141,9 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         Button resetButton = (Button) view.findViewById(R.id.btn_reset);
         resetButton.setOnClickListener(TimeTrialWorkoutFragment.this);
 
+        Button quitButton = (Button) view.findViewById(R.id.btn_quit);
+        quitButton.setOnClickListener(TimeTrialWorkoutFragment.this);
+
         view.findViewById(R.id.current_reps_container).setOnClickListener(
                 TimeTrialWorkoutFragment.this);
 
@@ -137,7 +158,12 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
         switch (id) {
             case R.id.btn_reset:
-                showConfirmationDialog(mResetDialog);
+                if (mStarted) {
+                    showConfirmationDialog(mResetDialog);
+                    if (!mPaused) {
+                        pauseWorkout();
+                    }
+                }
                 break;
 
             case R.id.btn_play_pause:
@@ -149,6 +175,13 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
                     } else {
                         resumeWorkout();    // resume button
                     }
+                }
+                break;
+
+            case R.id.btn_quit:
+                showConfirmationDialog(mQuitDialog);
+                if (mStarted && !mPaused) {
+                    pauseWorkout();
                 }
                 break;
 
@@ -168,11 +201,24 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
         if (mResetDialogTitle.equals(title)) {
             resetWorkout();
+        } else if (mQuitDialogTitle.equals(title)) {
+            getActivity().finish();
+        } else if (mSuccessDialogTitle.equals(title)) {
+            resetWorkout();
+        } else if (mFailDialogTitle.equals(title)) {
+            resetWorkout();
         }
     }
 
     @Override
     public void onCancel(ConfirmationDialogFragment dialog) {
+        String title = dialog.getDialogTitle();
+
+        if (mFailDialogTitle.equals(title)) {
+            getActivity().finish();
+        } else if (mSuccessDialogTitle.equals(title)) {
+            getActivity().finish();
+        }
     }
 
     private void onHandleRep() {
@@ -189,8 +235,8 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
                 updateSetFragment();
 
                 if (mSets >= mTargetSets) {
-                    Toast.makeText(getActivity(), "You completed the challenge!", Toast.LENGTH_SHORT).show();
-                    resetWorkout();
+                    showConfirmationDialog(mSuccessDialog);
+                    pauseWorkout();
                     return;
                 }
 
@@ -207,8 +253,8 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
             @Override
             public void run() {
                 if ("00:00".equals(mChronometer.getText().toString())) {
-                    Toast.makeText(getActivity(), "You failed the challenge!", Toast.LENGTH_SHORT).show();
-                    resetWorkout();
+                    showConfirmationDialog(mFailDialog);
+                    pauseWorkout();
                 }
             }
         }, 2000);
@@ -287,6 +333,25 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         String updated = DateTimeUtil.getSetTimeViewString(reset, mTargetSetTime, mTimeInSet,
                 FORMAT_SET_TIME);
         mChronometer.setText(updated);
+    }
+
+    private void setupSimpleConfirmationDialog(ConfirmationDialogFragment dialog,
+                                               String dialogTitle, String dialogText) {
+        dialog.setHasCancel(true);
+        dialog.setOnConfirmationDialogFragmentListener(TimeTrialWorkoutFragment.this);
+        dialog.setDialogTitle(dialogTitle);
+        dialog.setDialogText(dialogText);
+    }
+
+    public void setupConfirmationDialog(ConfirmationDialogFragment dialog, String dialogTitle,
+                                        String dialogText, String confirmButtonText,
+                                        String cancelButtonText) {
+        dialog.setHasCancel(true);
+        dialog.setOnConfirmationDialogFragmentListener(TimeTrialWorkoutFragment.this);
+        dialog.setDialogTitle(dialogTitle);
+        dialog.setDialogText(dialogText);
+        dialog.setConfirmButtonText(confirmButtonText);
+        dialog.setCancelButtonText(cancelButtonText);
     }
 
     /**

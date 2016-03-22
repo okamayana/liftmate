@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:text="Time Trial Setup"
         android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"/>
 
     <EditText
         android:id="@+id/target_sets_input"

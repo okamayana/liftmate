@@ -10,8 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dialog Title"
+        android:textAllCaps="true"
         android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"/>
 
     <TextView
@@ -37,10 +38,10 @@
         android:id="@+id/btn_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/btn_confirm"
         android:layout_below="@id/dialog_text"
-        android:layout_marginTop="15dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@id/btn_confirm"
         android:padding="16dp"
         android:text="Cancel"
         android:theme="@style/LiftmateButtonRed"/>
