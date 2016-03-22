@@ -147,6 +147,12 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
         mChronometer.setBase(System.currentTimeMillis() + mTimeInSet);
         mChronometer.start();
+        for (int i = 0; i < 3; i++) {
+            mTimePaused = mChronometer.getBase() - System.currentTimeMillis();
+            mChronometer.stop();
+            mChronometer.setBase(System.currentTimeMillis() + mTimePaused);
+            mChronometer.start();
+        }
     }
 
     private void pauseWorkout() {
