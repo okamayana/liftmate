@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.google.CountdownChronometer;
@@ -101,6 +102,9 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         Button resetButton = (Button) view.findViewById(R.id.btn_reset);
         resetButton.setOnClickListener(TimeTrialWorkoutFragment.this);
 
+        view.findViewById(R.id.current_reps_container).setOnClickListener(
+                TimeTrialWorkoutFragment.this);
+
         updateRepsView();
         updateSetsView();
         updateSetTimeView(false);
@@ -126,6 +130,33 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
                     }
                 }
                 break;
+
+            case R.id.current_reps_container:
+                handleRep();
+                break;
+        }
+    }
+
+    private void handleRep() {
+        if (mStarted && !mPaused) {
+            mReps++;
+            updateRepsView();
+
+            if (mReps >= mTargetReps) {
+                mReps = 0;
+                updateRepsView();
+
+                mSets++;
+                updateSetsView();
+
+                mChronometer.stop();
+                updateSetTimeView(true);
+                kickStartChronometer(System.currentTimeMillis() + 1000 + mTimeInSet);
+
+                if (mSets >= mTargetSets) {
+                    Toast.makeText(getActivity(), "Finished!", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -138,6 +169,11 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         mTimeInSet = mTargetSetTime;
         mChronometer.stop();
         updateSetTimeView(true);
+
+        mReps = 0;
+        mSets = 0;
+        updateSetsView();
+        updateRepsView();
     }
 
     private void startWorkout() {
@@ -145,14 +181,7 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         mStarted = true;
         mPaused = false;
 
-        mChronometer.setBase(System.currentTimeMillis() + mTimeInSet);
-        mChronometer.start();
-        for (int i = 0; i < 3; i++) {
-            mTimePaused = mChronometer.getBase() - System.currentTimeMillis();
-            mChronometer.stop();
-            mChronometer.setBase(System.currentTimeMillis() + mTimePaused);
-            mChronometer.start();
-        }
+        kickStartChronometer(System.currentTimeMillis() + mTimeInSet);
     }
 
     private void pauseWorkout() {
@@ -187,5 +216,16 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
                 - TimeUnit.MINUTES.toSeconds(minutes);
         mChronometer.setText(String.format(FORMAT_SET_TIME, minutes, seconds));
+    }
+
+    private void kickStartChronometer(long base) {
+        mChronometer.setBase(base);
+        mChronometer.start();
+        for (int i = 0; i < 3; i++) {
+            mTimePaused = mChronometer.getBase() - System.currentTimeMillis();
+            mChronometer.stop();
+            mChronometer.setBase(System.currentTimeMillis() + mTimePaused);
+            mChronometer.start();
+        }
     }
 }
