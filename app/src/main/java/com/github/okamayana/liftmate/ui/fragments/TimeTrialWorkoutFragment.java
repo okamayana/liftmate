@@ -6,12 +6,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.okamayana.liftmate.R;
+import com.github.okamayana.liftmate.google.CountdownChronometer;
 
-public class TimeTrialWorkoutFragment extends Fragment {
+import java.util.concurrent.TimeUnit;
+
+public class TimeTrialWorkoutFragment extends Fragment implements OnClickListener {
 
     public static final String EXTRA_TOTAL_SETS = "extra_total_sets";
     public static final String EXTRA_TOTAL_REPS = "extra_total_reps";
@@ -20,6 +25,7 @@ public class TimeTrialWorkoutFragment extends Fragment {
     public static final String EXTRA_BLUETOOTH_DEVICE = "extra_bluetooth_device";
 
     private static final String FORMAT_SETS_REPS = "%d/%d";
+    private static final String FORMAT_SET_TIME = "%02d:%02d";
 
     public static TimeTrialWorkoutFragment newInstance(int totalSets, int totalReps,
                                                        int targetMinsPerSet, int targetSecsPerSet,
@@ -42,9 +48,18 @@ public class TimeTrialWorkoutFragment extends Fragment {
     private int mSets;
     private int mReps;
 
+    private long mTimeInSet;
+    private long mTargetSetTime;
+
     private TextView mRepsView;
     private TextView mSetsView;
-    private TextView mSetTimeView;
+    private CountdownChronometer mChronometer;
+
+    private Button mPlayPauseButton;
+
+    private boolean mStarted;
+    private boolean mPaused;
+    private long mTimePaused;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +71,14 @@ public class TimeTrialWorkoutFragment extends Fragment {
         Bundle args = getArguments();
         mTargetSets = args.getInt(EXTRA_TOTAL_SETS);
         mTargetReps = args.getInt(EXTRA_TOTAL_REPS);
+        int targetMinsPerSet = args.getInt(EXTRA_MINS_PER_SET);
+        int targetSecsPerSet = args.getInt(EXTRA_SECS_PER_SET);
+
+        mTargetSetTime = (long) targetMinsPerSet * 60L * 1000L + (long) targetSecsPerSet * 1000L;
+        mTimeInSet = mTargetSetTime;
+
+        mStarted = false;
+        mPaused = false;
     }
 
     @Nullable
@@ -70,10 +93,76 @@ public class TimeTrialWorkoutFragment extends Fragment {
 
         mRepsView = (TextView) view.findViewById(R.id.current_reps_view);
         mSetsView = (TextView) view.findViewById(R.id.current_set_view);
-        mSetTimeView = (TextView) view.findViewById(R.id.set_time_view);
+        mChronometer = (CountdownChronometer) view.findViewById(R.id.set_time_view);
+
+        mPlayPauseButton = (Button) view.findViewById(R.id.btn_play_pause);
+        mPlayPauseButton.setOnClickListener(TimeTrialWorkoutFragment.this);
+
+        Button resetButton = (Button) view.findViewById(R.id.btn_reset);
+        resetButton.setOnClickListener(TimeTrialWorkoutFragment.this);
 
         updateRepsView();
         updateSetsView();
+        updateSetTimeView(false);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        switch (id) {
+            case R.id.btn_reset:
+                resetWorkout();
+                break;
+
+            case R.id.btn_play_pause:
+                if (!mStarted) {
+                    startWorkout();         // start button
+                } else {
+                    if (!mPaused) {
+                        pauseWorkout();     // pause button
+                    } else {
+                        resumeWorkout();    // resume button
+                    }
+                }
+                break;
+        }
+    }
+
+    private void resetWorkout() {
+        mPlayPauseButton.setText("Start");
+        mStarted = false;
+        mPaused = false;
+
+        mTimePaused = 0;
+        mTimeInSet = mTargetSetTime;
+        mChronometer.stop();
+        updateSetTimeView(true);
+    }
+
+    private void startWorkout() {
+        mPlayPauseButton.setText("Pause");
+        mStarted = true;
+        mPaused = false;
+
+        mChronometer.setBase(System.currentTimeMillis() + mTimeInSet);
+        mChronometer.start();
+    }
+
+    private void pauseWorkout() {
+        mPlayPauseButton.setText("Resume");
+        mPaused = true;
+
+        mTimePaused = mChronometer.getBase() - System.currentTimeMillis();
+        mChronometer.stop();
+    }
+
+    private void resumeWorkout() {
+        mPlayPauseButton.setText("Pause");
+        mPaused = false;
+
+        mChronometer.setBase(System.currentTimeMillis() + mTimePaused);
+        mChronometer.start();
     }
 
     private void updateRepsView() {
@@ -82,5 +171,15 @@ public class TimeTrialWorkoutFragment extends Fragment {
 
     private void updateSetsView() {
         mSetsView.setText(String.format(FORMAT_SETS_REPS, mSets, mTargetSets));
+    }
+
+    private void updateSetTimeView(boolean reset) {
+        long millis = reset ? mTargetSetTime : mTimeInSet;
+
+        mChronometer.setText(String.format(FORMAT_SET_TIME, 0, 0));
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
+                - TimeUnit.MINUTES.toSeconds(minutes);
+        mChronometer.setText(String.format(FORMAT_SET_TIME, minutes, seconds));
     }
 }
