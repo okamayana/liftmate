@@ -71,7 +71,7 @@ public class TimeTrialSetsFragment extends Fragment {
         super.onDestroy();
         getActivity().unregisterReceiver(mSetBroadcastReceiver);
     }
-    
+
     private void handleReset() {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();

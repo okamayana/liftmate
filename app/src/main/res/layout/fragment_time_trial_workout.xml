@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Done"
-            android:theme="@style/LiftmateButtonPurple"/>
+            android:theme="@style/LiftmateButtonPrimary"/>
     </LinearLayout>
 
     <TextView
