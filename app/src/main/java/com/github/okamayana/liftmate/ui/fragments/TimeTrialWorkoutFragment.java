@@ -19,6 +19,8 @@ public class TimeTrialWorkoutFragment extends Fragment {
     public static final String EXTRA_SECS_PER_SET = "extra_secs_per_set";
     public static final String EXTRA_BLUETOOTH_DEVICE = "extra_bluetooth_device";
 
+    private static final String FORMAT_SETS_REPS = "%d/%d";
+
     public static TimeTrialWorkoutFragment newInstance(int totalSets, int totalReps,
                                                        int targetMinsPerSet, int targetSecsPerSet,
                                                        BluetoothDevice device) {
@@ -35,12 +37,10 @@ public class TimeTrialWorkoutFragment extends Fragment {
         return fragment;
     }
 
+    private int mTargetSets;
+    private int mTargetReps;
     private int mSets;
     private int mReps;
-    private int mTotalSets;
-    private int mTotalReps;
-
-    private long mRepTimeMillis;
 
     private TextView mRepsView;
     private TextView mSetsView;
@@ -53,11 +53,9 @@ public class TimeTrialWorkoutFragment extends Fragment {
         mSets = 0;
         mReps = 0;
 
-        mRepTimeMillis = 0L;
-
         Bundle args = getArguments();
-        mTotalSets = args.getInt(EXTRA_TOTAL_SETS);
-        mTotalReps = args.getInt(EXTRA_TOTAL_REPS);
+        mTargetSets = args.getInt(EXTRA_TOTAL_SETS);
+        mTargetReps = args.getInt(EXTRA_TOTAL_REPS);
     }
 
     @Nullable
@@ -73,5 +71,16 @@ public class TimeTrialWorkoutFragment extends Fragment {
         mRepsView = (TextView) view.findViewById(R.id.current_reps_view);
         mSetsView = (TextView) view.findViewById(R.id.current_set_view);
         mSetTimeView = (TextView) view.findViewById(R.id.set_time_view);
+
+        updateRepsView();
+        updateSetsView();
+    }
+
+    private void updateRepsView() {
+        mRepsView.setText(String.format(FORMAT_SETS_REPS, mReps, mTargetReps));
+    }
+
+    private void updateSetsView() {
+        mSetsView.setText(String.format(FORMAT_SETS_REPS, mSets, mTargetSets));
     }
 }

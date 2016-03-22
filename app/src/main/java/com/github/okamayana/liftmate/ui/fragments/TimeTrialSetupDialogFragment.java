@@ -107,13 +107,13 @@ public class TimeTrialSetupDialogFragment extends AppCompatDialogFragment implem
     private boolean validateInput() {
         return mTargetRepsEdit.getText().length() > 0
                 && mTargetSetsEdit.getText().length() > 0
-                && mMinutesSpinner.getSelectedItemPosition() > 0
-                && mSecondsSpinner.getSelectedItemPosition() > 0;
+                && (mMinutesSpinner.getSelectedItemPosition() > 0
+                || mSecondsSpinner.getSelectedItemPosition() > 0);
     }
 
     private static String[] getSpinnerValues() {
-        String[] spinnerValues = new String[59];
-        for (int i = 0; i < 59; i++) {
+        String[] spinnerValues = new String[60];
+        for (int i = 0; i < 60; i++) {
             spinnerValues[i] = String.valueOf(i);
         }
 

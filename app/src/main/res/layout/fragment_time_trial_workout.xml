@@ -47,35 +47,6 @@
                 android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/label_current_reps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reps"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/current_reps_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:minEms="3"
-                    android:text="0/8"
-                    android:textAlignment="center"
-                    android:textSize="16sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="15dp">
-
-                <TextView
                     android:id="@+id/label_current_set"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -92,6 +63,35 @@
                     android:layout_marginTop="5dp"
                     android:minEms="3"
                     android:text="0/3"
+                    android:textAlignment="center"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/label_current_reps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reps"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/current_reps_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:minEms="3"
+                    android:text="0/8"
                     android:textAlignment="center"
                     android:textSize="16sp"/>
             </LinearLayout>
