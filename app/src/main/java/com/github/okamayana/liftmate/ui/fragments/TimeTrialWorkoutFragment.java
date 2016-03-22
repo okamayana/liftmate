@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,15 +13,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.google.CountdownChronometer;
+import com.github.okamayana.liftmate.net.BluetoothThread;
+import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadHandler;
+import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadListener;
 import com.github.okamayana.liftmate.ui.fragments.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 import com.github.okamayana.liftmate.util.DateTimeUtil;
 
-public class TimeTrialWorkoutFragment extends Fragment implements OnClickListener,
-        OnChronometerTickListener, ConfirmationDialogFragmentListener {
+public class TimeTrialWorkoutFragment extends Fragment implements
+        OnClickListener, OnChronometerTickListener, ConfirmationDialogFragmentListener,
+        BluetoothThreadListener, OnSeekBarChangeListener {
 
     public static final String EXTRA_TOTAL_SETS = "extra_total_sets";
     public static final String EXTRA_TOTAL_REPS = "extra_total_reps";
@@ -30,6 +37,8 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
     private static final String FORMAT_SETS_REPS = "%d/%d";
     private static final String FORMAT_SET_TIME = "%02d:%02d";
+
+    private static final String LOG_TAG = "TimeTrialWorkout";
 
     public static TimeTrialWorkoutFragment newInstance(int totalSets, int totalReps,
                                                        int targetMinsPerSet, int targetSecsPerSet,
@@ -74,16 +83,22 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
     private ConfirmationDialogFragment mQuitDialog;
 
     private String mSuccessDialogTitle = "Time trial challenge complete";
-    private String mSuccessDialogText = "Congratulations! You have successfully completed your Time Trial workout challenge! You may choose to save your workout, or go back to the home screen.";
+    private String mSuccessDialogText = "Congratulations! You have successfully completed your Time Trial workout challenge!\n\nYou may choose to retry your challenge, or go back to the home screen.";
     private String mSuccessDialogConfirmText = "Retry";
-    private String mSuccessDialogCancelText = "Save and leave";
+    private String mSuccessDialogCancelText = "Leave";
     private ConfirmationDialogFragment mSuccessDialog;
 
     private String mFailDialogTitle = "Time trial challenge failed";
-    private String mFailDialogText = "Unfortunately, you were not able to successfully complete your Time Trial workout challenge. You may choose to retry the challenge, or go back to the home screen.";
+    private String mFailDialogText = "Unfortunately, you were not able to successfully complete your Time Trial workout challenge.\n\nYou may choose to retry the challenge, or go back to the home screen.";
     private String mFailDialogConfirmText = "Retry";
     private String mFailDialogCancelText = "Leave";
     private ConfirmationDialogFragment mFailDialog;
+
+    private TextView mPushResistanceView;
+    private TextView mPullResistanceView;
+
+    private BluetoothThread mBluetoothThread;
+    private SeekBar mResistanceSlider;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +132,12 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         mFailDialog = new ConfirmationDialogFragment();
         setupConfirmationDialog(mFailDialog, mFailDialogTitle, mFailDialogText,
                 mFailDialogConfirmText, mFailDialogCancelText);
+
+        BluetoothDevice device = args.getParcelable(EXTRA_BLUETOOTH_DEVICE);
+        BluetoothThreadHandler handler = new BluetoothThreadHandler(TimeTrialWorkoutFragment.this);
+        mBluetoothThread = new BluetoothThread(device, handler);
+
+        new Thread(mBluetoothThread).start();
     }
 
     @Nullable
@@ -131,6 +152,12 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
         mRepsView = (TextView) view.findViewById(R.id.current_reps_view);
         mSetsView = (TextView) view.findViewById(R.id.current_set_view);
+
+        mPullResistanceView = (TextView) view.findViewById(R.id.pull_resistance_view);
+        mPushResistanceView = (TextView) view.findViewById(R.id.push_resistance_view);
+
+        mResistanceSlider = (SeekBar) view.findViewById(R.id.resistance_slider);
+        mResistanceSlider.setOnSeekBarChangeListener(TimeTrialWorkoutFragment.this);
 
         mChronometer = (CountdownChronometer) view.findViewById(R.id.set_time_view);
         mChronometer.setOnChronometerTickListener(TimeTrialWorkoutFragment.this);
@@ -150,6 +177,12 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         updateRepsView();
         updateSetsView();
         updateSetTimeView(false);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBluetoothThread.stop();
     }
 
     @Override
@@ -192,7 +225,9 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
     }
 
     public void showConfirmationDialog(ConfirmationDialogFragment dialog) {
-        dialog.show(getActivity().getSupportFragmentManager(), null);
+        if (!dialog.isAdded()) {
+            dialog.show(getActivity().getSupportFragmentManager(), null);
+        }
     }
 
     @Override
@@ -368,4 +403,33 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
             mChronometer.start();
         }
     }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        int pushResistance = progress - 2;
+        mPushResistanceView.setText(String.valueOf(pushResistance));
+
+        int pullResistance = progress + 2;
+        mPullResistanceView.setText(String.valueOf(pullResistance));
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        String resistanceStr = String.valueOf(mResistanceSlider.getProgress());
+        Log.d(LOG_TAG, "Sending resistance value: " + resistanceStr);
+        mBluetoothThread.write(resistanceStr.getBytes());
+    }
+
+    @Override
+    public void onReceiveData(char data) {
+        if (mStarted && !mPaused) {
+
+            if (data == '1') {
+                onHandleRep();
+            }
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {}
 }
