@@ -4,11 +4,14 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +20,8 @@ import com.github.okamayana.liftmate.google.CountdownChronometer;
 
 import java.util.concurrent.TimeUnit;
 
-public class TimeTrialWorkoutFragment extends Fragment implements OnClickListener {
+public class TimeTrialWorkoutFragment extends Fragment implements OnClickListener,
+        OnChronometerTickListener {
 
     public static final String EXTRA_TOTAL_SETS = "extra_total_sets";
     public static final String EXTRA_TOTAL_REPS = "extra_total_reps";
@@ -94,7 +98,9 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
         mRepsView = (TextView) view.findViewById(R.id.current_reps_view);
         mSetsView = (TextView) view.findViewById(R.id.current_set_view);
+
         mChronometer = (CountdownChronometer) view.findViewById(R.id.set_time_view);
+        mChronometer.setOnChronometerTickListener(TimeTrialWorkoutFragment.this);
 
         mPlayPauseButton = (Button) view.findViewById(R.id.btn_play_pause);
         mPlayPauseButton.setOnClickListener(TimeTrialWorkoutFragment.this);
@@ -132,12 +138,12 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
                 break;
 
             case R.id.current_reps_container:
-                handleRep();
+                onHandleRep();
                 break;
         }
     }
 
-    private void handleRep() {
+    private void onHandleRep() {
         if (mStarted && !mPaused) {
             mReps++;
             updateRepsView();
@@ -146,18 +152,36 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
                 mReps = 0;
                 updateRepsView();
 
+                if (mSets >= mTargetSets) {
+                    Toast.makeText(getActivity(), "Finished!", Toast.LENGTH_SHORT).show();
+                    resetWorkout();
+                    return;
+                }
+
                 mSets++;
                 updateSetsView();
 
                 mChronometer.stop();
                 updateSetTimeView(true);
                 kickStartChronometer(System.currentTimeMillis() + 1000 + mTimeInSet);
-
-                if (mSets >= mTargetSets) {
-                    Toast.makeText(getActivity(), "Finished!", Toast.LENGTH_SHORT).show();
-                }
             }
         }
+    }
+
+    @Override
+    public void onChronometerTick(final Chronometer chronometer) {
+        final String time = chronometer.getText().toString();
+        Log.d("TimeTrialFragment", "onChronometerTick: time = " + time);
+
+        mChronometer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if ("00:00".equals(mChronometer.getText().toString())) {
+                    Toast.makeText(getActivity(), "You failed the challenge!", Toast.LENGTH_SHORT).show();
+                    resetWorkout();
+                }
+            }
+        }, 2000);
     }
 
     private void resetWorkout() {
