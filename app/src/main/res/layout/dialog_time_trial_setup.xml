@@ -45,7 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minWidth="20dp"
             android:spinnerMode="dropdown"/>
 
         <TextView
@@ -60,14 +59,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minWidth="20dp"
             android:spinnerMode="dropdown"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="seconds"
+            android:text="seconds per set"
             android:textSize="14sp"/>
     </LinearLayout>
 

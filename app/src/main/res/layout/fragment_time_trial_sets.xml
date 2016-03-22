@@ -25,7 +25,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/your_sets"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
@@ -33,16 +33,16 @@
         android:layout_marginTop="10dp"
         app:cardUseCompatPadding="true">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/set_list_headers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="15dp">
 
                 <TextView
                     android:id="@+id/set_number_label"
@@ -64,7 +64,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textAlignment="center"
-                    android:text="Set Time (s)"/>
+                    android:text="Set Time"/>
 
                 <TextView
                     android:id="@+id/rep_time_label"
@@ -75,11 +75,12 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textAlignment="center"
-                    android:text="Rep Time (s)"/>
+                    android:text="Rep Time"/>
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/sets_list_view"
+                android:layout_below="@id/set_list_headers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:animationCache="false"
@@ -88,8 +89,20 @@
                 android:paddingRight="15dp"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
                 android:scrollbars="vertical"
-                android:scrollingCache="false"/>
-        </LinearLayout>
+                android:scrollingCache="false"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/sets_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16dp"
+                android:text="You have not\ncompleted a set yet"
+                android:visibility="visible"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>

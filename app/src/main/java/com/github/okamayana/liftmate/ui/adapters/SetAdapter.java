@@ -10,19 +10,22 @@ import android.widget.TextView;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.ui.adapters.SetAdapter.SetViewHolder;
+import com.github.okamayana.liftmate.util.DateTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SetAdapter extends Adapter<SetViewHolder> {
 
+    public static final String FORMAT_TIME = "%02d:%02d";
+
     public static class Set {
 
         private int mSetNumber;
-        private float mSetTime;
-        private float mRepTime;
+        private long mSetTime;
+        private long mRepTime;
 
-        public Set(int setNumber, float setTime, float repTime) {
+        public Set(int setNumber, long setTime, long repTime) {
             mSetNumber = setNumber;
             mSetTime = setTime;
             mRepTime = repTime;
@@ -32,11 +35,11 @@ public class SetAdapter extends Adapter<SetViewHolder> {
             return mSetNumber;
         }
 
-        public float getSetTime() {
+        public long getSetTime() {
             return mSetTime;
         }
 
-        public float getRepTime() {
+        public long getRepTime() {
             return mRepTime;
         }
     }
@@ -61,10 +64,6 @@ public class SetAdapter extends Adapter<SetViewHolder> {
 
     public SetAdapter(Context context) {
         mItems = new ArrayList<>();
-        mItems.add(new Set(1, 30.50f, 3.81f));
-        mItems.add(new Set(2, 31.30f, 3.91f));
-        mItems.add(new Set(3, 29.60f, 3.70f));
-
         mContext = context;
     }
 
@@ -78,9 +77,24 @@ public class SetAdapter extends Adapter<SetViewHolder> {
     public void onBindViewHolder(SetViewHolder viewHolder, int position) {
         Set item = mItems.get(position);
 
-        viewHolder.setNumberView.setText(String.valueOf(item.getSetNumber()));
-        viewHolder.setTimeView.setText(String.valueOf(item.getSetTime()));
-        viewHolder.repTimeView.setText(String.valueOf(item.getRepTime()));
+        int setNumber = item.getSetNumber();
+        viewHolder.setNumberView.setText(String.valueOf(setNumber));
+
+        long setTime = item.getSetTime();
+        String setTimestamp = DateTimeUtil.getTimestampFromMillis(setTime, FORMAT_TIME);
+        viewHolder.setTimeView.setText(setTimestamp);
+
+        long repTime = item.getRepTime();
+        String repTimestamp = DateTimeUtil.getTimestampFromMillis(repTime, FORMAT_TIME);
+        viewHolder.repTimeView.setText(repTimestamp);
+    }
+
+    public void add(Set item) {
+        mItems.add(item);
+    }
+
+    public void clear() {
+        mItems.clear();
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.github.okamayana.liftmate.ui.fragments;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,8 +17,7 @@ import android.widget.Toast;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.google.CountdownChronometer;
-
-import java.util.concurrent.TimeUnit;
+import com.github.okamayana.liftmate.util.DateTimeUtil;
 
 public class TimeTrialWorkoutFragment extends Fragment implements OnClickListener,
         OnChronometerTickListener {
@@ -55,6 +54,8 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
     private long mTimeInSet;
     private long mTargetSetTime;
+    private int mMinutesPerSet;
+    private int mSecondsPerSet;
 
     private TextView mRepsView;
     private TextView mSetsView;
@@ -79,7 +80,10 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         int targetMinsPerSet = args.getInt(EXTRA_MINS_PER_SET);
         int targetSecsPerSet = args.getInt(EXTRA_SECS_PER_SET);
 
-        mTargetSetTime = (long) targetMinsPerSet * 60L * 1000L + (long) targetSecsPerSet * 1000L;
+        mMinutesPerSet = targetMinsPerSet;
+        mSecondsPerSet = targetSecsPerSet;
+
+        mTargetSetTime = (long) mMinutesPerSet * 60L * 1000L + (long) mSecondsPerSet * 1000L;
         mTimeInSet = mTargetSetTime;
 
         mStarted = false;
@@ -152,14 +156,15 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
                 mReps = 0;
                 updateRepsView();
 
+                mSets++;
+                updateSetsView();
+                updateSetFragment();
+
                 if (mSets >= mTargetSets) {
-                    Toast.makeText(getActivity(), "Finished!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You completed the challenge!", Toast.LENGTH_SHORT).show();
                     resetWorkout();
                     return;
                 }
-
-                mSets++;
-                updateSetsView();
 
                 mChronometer.stop();
                 updateSetTimeView(true);
@@ -181,6 +186,26 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         }, 2000);
     }
 
+    private void updateSetFragment() {
+        long timeRemaining = DateTimeUtil.getMillisFromChronometer(mChronometer);
+        long setTime = mTargetSetTime - timeRemaining;
+
+        Intent setBroadcastIntent = new Intent();
+        setBroadcastIntent.setAction(TimeTrialSetsFragment.ACTION_SET_COMPLETE);
+        setBroadcastIntent.putExtra(TimeTrialSetsFragment.EXTRA_SET_NUNBER, mSets);
+        setBroadcastIntent.putExtra(TimeTrialSetsFragment.EXTRA_SET_TIME, setTime);
+        setBroadcastIntent.putExtra(TimeTrialSetsFragment.EXTRA_REPS_IN_SET, mTargetReps);
+
+        getActivity().sendBroadcast(setBroadcastIntent);
+    }
+
+    private void resetSetFragment() {
+        Intent setBroadcastIntent = new Intent();
+        setBroadcastIntent.setAction(TimeTrialSetsFragment.ACTION_RESET);
+
+        getActivity().sendBroadcast(setBroadcastIntent);
+    }
+
     private void resetWorkout() {
         mPlayPauseButton.setText("Start");
         mStarted = false;
@@ -195,6 +220,7 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         mSets = 0;
         updateSetsView();
         updateRepsView();
+        resetSetFragment();
     }
 
     private void startWorkout() {
@@ -230,13 +256,9 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
     }
 
     private void updateSetTimeView(boolean reset) {
-        long millis = reset ? mTargetSetTime : mTimeInSet;
-
-        mChronometer.setText(String.format(FORMAT_SET_TIME, 0, 0));
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
-                - TimeUnit.MINUTES.toSeconds(minutes);
-        mChronometer.setText(String.format(FORMAT_SET_TIME, minutes, seconds));
+        String updated = DateTimeUtil.getSetTimeViewString(reset, mTargetSetTime, mTimeInSet,
+                FORMAT_SET_TIME);
+        mChronometer.setText(updated);
     }
 
     /**
