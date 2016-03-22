@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dialog Title"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/dialog_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_title"
+        android:layout_marginTop="15dp"
+        android:text="Are you sure you wish to reset your workout?"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dialog_text"
+        android:layout_marginTop="15dp"
+        android:padding="16dp"
+        android:text="Confirm"
+        android:theme="@style/LiftmateButtonGreen"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_confirm"
+        android:layout_below="@id/dialog_text"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:padding="16dp"
+        android:text="Cancel"
+        android:theme="@style/LiftmateButtonRed"/>
+
+</RelativeLayout>

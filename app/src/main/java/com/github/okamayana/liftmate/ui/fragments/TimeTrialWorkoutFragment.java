@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,10 +18,11 @@ import android.widget.Toast;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.google.CountdownChronometer;
+import com.github.okamayana.liftmate.ui.fragments.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 import com.github.okamayana.liftmate.util.DateTimeUtil;
 
 public class TimeTrialWorkoutFragment extends Fragment implements OnClickListener,
-        OnChronometerTickListener {
+        OnChronometerTickListener, ConfirmationDialogFragmentListener {
 
     public static final String EXTRA_TOTAL_SETS = "extra_total_sets";
     public static final String EXTRA_TOTAL_REPS = "extra_total_reps";
@@ -67,6 +69,10 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
     private boolean mPaused;
     private long mTimePaused;
 
+    private String mResetDialogTitle = "Confirm workout reset";
+    private String mResetDialogText = "Are you sure you want to reset your workout? This will erase all workout progress";
+    private ConfirmationDialogFragment mResetDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +94,11 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
         mStarted = false;
         mPaused = false;
+
+        mResetDialog = new ConfirmationDialogFragment();
+        mResetDialog.setOnConfirmationDialogFragmentListener(TimeTrialWorkoutFragment.this);
+        mResetDialog.setDialogTitle(mResetDialogTitle);
+        mResetDialog.setDialogText(mResetDialogText);
     }
 
     @Nullable
@@ -126,7 +137,7 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
         switch (id) {
             case R.id.btn_reset:
-                resetWorkout();
+                showConfirmationDialog(mResetDialog);
                 break;
 
             case R.id.btn_play_pause:
@@ -145,6 +156,23 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
                 onHandleRep();
                 break;
         }
+    }
+
+    public void showConfirmationDialog(ConfirmationDialogFragment dialog) {
+        dialog.show(getActivity().getSupportFragmentManager(), null);
+    }
+
+    @Override
+    public void onConfirm(ConfirmationDialogFragment dialog) {
+        String title = dialog.getDialogTitle();
+
+        if (mResetDialogTitle.equals(title)) {
+            resetWorkout();
+        }
+    }
+
+    @Override
+    public void onCancel(ConfirmationDialogFragment dialog) {
     }
 
     private void onHandleRep() {
