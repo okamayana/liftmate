@@ -2,9 +2,11 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ffffffff</color>
 
     <color name="background_light_grey">#e5e5e5</color>
+    <color name="background_darker_grey">#ff282828</color>
+    <color name="background_dark_grey">#ff202020</color>
 
     <color name="material_red">#fff44336</color>
     <color name="material_red_dark">#990000</color>

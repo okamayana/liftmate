@@ -32,21 +32,51 @@
         android:hint="Target reps per set"
         android:inputType="number"/>
 
-    <EditText
-        android:id="@+id/target_time_input"
+    <LinearLayout
+        android:id="@+id/set_time_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/target_reps_input"
         android:layout_marginTop="5dp"
-        android:hint="Target time per set"
-        android:inputType="number"/>
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/mins_per_set_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minWidth="20dp"
+            android:spinnerMode="dropdown"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="minutes"
+            android:textSize="14sp"/>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/secs_per_set_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minWidth="20dp"
+            android:spinnerMode="dropdown"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="seconds"
+            android:textSize="14sp"/>
+    </LinearLayout>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_start_workout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/target_time_input"
+        android:layout_below="@id/set_time_container"
         android:layout_marginTop="15dp"
         android:padding="16dp"
         android:text="Start workout"
