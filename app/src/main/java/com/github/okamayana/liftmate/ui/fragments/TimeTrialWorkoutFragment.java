@@ -170,9 +170,6 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
 
     @Override
     public void onChronometerTick(final Chronometer chronometer) {
-        final String time = chronometer.getText().toString();
-        Log.d("TimeTrialFragment", "onChronometerTick: time = " + time);
-
         mChronometer.postDelayed(new Runnable() {
             @Override
             public void run() {
