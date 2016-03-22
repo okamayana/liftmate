@@ -242,6 +242,10 @@ public class TimeTrialWorkoutFragment extends Fragment implements OnClickListene
         mChronometer.setText(String.format(FORMAT_SET_TIME, minutes, seconds));
     }
 
+    /**
+     * Hack to start the CountdownChronometer to ensure it does not get stuck
+     * in the first second.
+     */
     private void kickStartChronometer(long base) {
         mChronometer.setBase(base);
         mChronometer.start();
