@@ -65,9 +65,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/bluetooth_list"
         android:layout_margin="15dp"
-        android:enabled="false"
+        android:enabled="true"
         android:padding="16dp"
         android:text="Refresh"
         android:theme="@style/LiftmateButtonGreen"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_bluetooth_refresh_disabled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bluetooth_list"
+        android:layout_margin="15dp"
+        android:enabled="false"
+        android:padding="16dp"
+        android:text="Refresh"
+        android:visibility="gone"/>
 
 </RelativeLayout>

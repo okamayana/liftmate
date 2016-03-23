@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -49,6 +48,7 @@ public class BluetoothSearchDialogFragment extends AppCompatDialogFragment imple
     private BluetoothDeviceListAdapter mDeviceListAdapter;
 
     private Button mRefreshButton;
+    private Button mRefreshButtonFake;
     private View mEmptyView;
 
     private MainMenuItem mMainMenuItem;
@@ -83,11 +83,13 @@ public class BluetoothSearchDialogFragment extends AppCompatDialogFragment imple
         mEmptyView = view.findViewById(R.id.bluetooth_no_devices);
 
         mRefreshButton = (Button) view.findViewById(R.id.btn_bluetooth_refresh);
+        mRefreshButtonFake = (Button) view.findViewById(R.id.btn_bluetooth_refresh_disabled);
         mRefreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startDiscovery();
-                mRefreshButton.setEnabled(false);
+                mRefreshButton.setVisibility(View.GONE);
+                mRefreshButtonFake.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -158,10 +160,14 @@ public class BluetoothSearchDialogFragment extends AppCompatDialogFragment imple
 
             if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 updateDiscoveryStatusView(true);
-                mRefreshButton.setEnabled(false);
+
+                mRefreshButton.setVisibility(View.GONE);
+                mRefreshButtonFake.setVisibility(View.VISIBLE);
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 updateDiscoveryStatusView(false);
-                mRefreshButton.setEnabled(true);
+
+                mRefreshButton.setVisibility(View.VISIBLE);
+                mRefreshButtonFake.setVisibility(View.GONE);
 
                 if (mDeviceListAdapter.getItemCount() == 0) {
                     mEmptyView.setVisibility(View.VISIBLE);
