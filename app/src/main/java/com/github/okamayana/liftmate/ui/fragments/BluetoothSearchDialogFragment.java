@@ -167,8 +167,11 @@ public class BluetoothSearchDialogFragment extends AppCompatDialogFragment imple
                 }
             } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                mDeviceListAdapter.add(device);
-                mDeviceListAdapter.notifyDataSetChanged();
+
+                if (device.getName().startsWith("FlexBT")) {
+                    mDeviceListAdapter.add(device);
+                    mDeviceListAdapter.notifyDataSetChanged();
+                }
 
                 Log.d(LOG_TAG, "found: " + device.getName()
                         + " @(" + device.getAddress() + ")");
