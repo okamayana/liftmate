@@ -15,6 +15,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -168,12 +169,15 @@ public class BluetoothSearchDialogFragment extends AppCompatDialogFragment imple
             } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-                if (device.getName().startsWith("FlexBT")) {
+                String name = device.getName();
+
+                if ((!TextUtils.isEmpty(name) && name.startsWith("FlexBT")) ||
+                        device.getAddress().startsWith("20:15:10:08:43:94")) {
                     mDeviceListAdapter.add(device);
                     mDeviceListAdapter.notifyDataSetChanged();
                 }
 
-                Log.d(LOG_TAG, "found: " + device.getName()
+                Log.d(LOG_TAG, "found: " + name
                         + " @(" + device.getAddress() + ")");
             }
         }
