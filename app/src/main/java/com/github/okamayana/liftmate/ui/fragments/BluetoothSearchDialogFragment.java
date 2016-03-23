@@ -1,9 +1,12 @@
 package com.github.okamayana.liftmate.ui.fragments;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -139,6 +142,10 @@ public class BluetoothSearchDialogFragment extends AppCompatDialogFragment imple
 
     @Override
     public void onBluetoothSelect() {
+        final Activity activity = getActivity();
+        if (activity instanceof OnDismissListener) {
+            ((OnDismissListener) activity).onDismiss(getDialog());
+        }
         dismiss();
     }
 

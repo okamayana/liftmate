@@ -1,5 +1,7 @@
 package com.github.okamayana.liftmate.ui.adapters;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -10,10 +12,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.okamayana.liftmate.FlexApplication;
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.ui.activities.FreeStyleActivity;
+import com.github.okamayana.liftmate.ui.activities.TimeTrialActivity;
 import com.github.okamayana.liftmate.ui.adapters.MainMenuAdapter.MainMenuViewHolder;
 import com.github.okamayana.liftmate.ui.fragments.BluetoothSearchDialogFragment;
+import com.github.okamayana.liftmate.ui.fragments.TimeTrialSetupDialogFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +69,7 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
                 listener = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showBluetoothSearchDialog(MainMenuItem.TIME_TRIAL_MODE);
+                        handleOnClick(MainMenuItem.TIME_TRIAL_MODE);
                     }
                 };
                 break;
@@ -73,7 +78,7 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
                 listener = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showBluetoothSearchDialog(MainMenuItem.FREE_STYLE_MODE);
+                        handleOnClick(MainMenuItem.FREE_STYLE_MODE);
                     }
                 };
                 break;
@@ -84,6 +89,25 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
         view.setOnClickListener(listener);
 
         return new MainMenuViewHolder(view);
+    }
+
+    private void handleOnClick(MainMenuItem mainMenuItem) {
+        FlexApplication application = (FlexApplication) ((Activity) mContext).getApplication();
+        BluetoothDevice device = application.getDevice();
+
+        if (device == null) {
+            showBluetoothSearchDialog(mainMenuItem);
+        } else {
+            switch (mainMenuItem) {
+                case TIME_TRIAL_MODE:
+                    showTimeTrialSetupDialog(device);
+                    break;
+
+                case FREE_STYLE_MODE:
+                    FreeStyleActivity.start(mContext, device);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -98,6 +122,13 @@ public class MainMenuAdapter extends Adapter<MainMenuViewHolder> {
         BluetoothSearchDialogFragment dialog = BluetoothSearchDialogFragment.newInstance(
                 mainMenuItem);
         dialog.show(((AppCompatActivity) mContext).getSupportFragmentManager(), null);
+    }
+
+    private void showTimeTrialSetupDialog(BluetoothDevice device) {
+        TimeTrialSetupDialogFragment setupDialog =
+                TimeTrialSetupDialogFragment.newInstance(device);
+        setupDialog.show(((AppCompatActivity) mContext).getSupportFragmentManager(),
+                null);
     }
 
     @Override

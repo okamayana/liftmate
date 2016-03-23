@@ -1,5 +1,6 @@
 package com.github.okamayana.liftmate.ui.adapters;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.okamayana.liftmate.FlexApplication;
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.ui.activities.FreeStyleActivity;
 import com.github.okamayana.liftmate.ui.adapters.BluetoothDeviceListAdapter.BluetoothDeviceViewHolder;
@@ -72,7 +74,16 @@ public class BluetoothDeviceListAdapter extends Adapter<BluetoothDeviceViewHolde
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startWorkoutActivity(device);
+                FlexApplication application = (FlexApplication) ((Activity) mContext).getApplication();
+                application.setDevice(device);
+
+                if (mDeviceSelectListener != null) {
+                    mDeviceSelectListener.onBluetoothSelect();
+                }
+
+                if (mMainMenuItem != null) {
+                    startWorkoutActivity(device);
+                }
             }
         });
     }
