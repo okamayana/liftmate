@@ -22,12 +22,13 @@ import com.github.okamayana.liftmate.google.CountdownChronometer;
 import com.github.okamayana.liftmate.net.BluetoothThread;
 import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadHandler;
 import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadListener;
+import com.github.okamayana.liftmate.ui.activities.TimeTrialActivity.OnBackPressedListener;
 import com.github.okamayana.liftmate.ui.fragments.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 import com.github.okamayana.liftmate.util.DateTimeUtil;
 
 public class TimeTrialWorkoutFragment extends Fragment implements
         OnClickListener, OnChronometerTickListener, ConfirmationDialogFragmentListener,
-        BluetoothThreadListener, OnSeekBarChangeListener {
+        BluetoothThreadListener, OnSeekBarChangeListener, OnBackPressedListener {
 
     public static final String EXTRA_TOTAL_SETS = "extra_total_sets";
     public static final String EXTRA_TOTAL_REPS = "extra_total_reps";
@@ -171,9 +172,6 @@ public class TimeTrialWorkoutFragment extends Fragment implements
         Button quitButton = (Button) view.findViewById(R.id.btn_quit);
         quitButton.setOnClickListener(TimeTrialWorkoutFragment.this);
 
-        view.findViewById(R.id.current_reps_container).setOnClickListener(
-                TimeTrialWorkoutFragment.this);
-
         updateRepsView();
         updateSetsView();
         updateSetTimeView(false);
@@ -217,10 +215,6 @@ public class TimeTrialWorkoutFragment extends Fragment implements
                     pauseWorkout();
                 }
                 break;
-
-            case R.id.current_reps_container:
-                onHandleRep();
-                break;
         }
     }
 
@@ -253,6 +247,16 @@ public class TimeTrialWorkoutFragment extends Fragment implements
             getActivity().finish();
         } else if (mSuccessDialogTitle.equals(title)) {
             getActivity().finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (hasNoDialogs()) {
+            showConfirmationDialog(mQuitDialog);
+            if (mStarted && !mPaused) {
+                pauseWorkout();
+            }
         }
     }
 
@@ -428,6 +432,11 @@ public class TimeTrialWorkoutFragment extends Fragment implements
                 onHandleRep();
             }
         }
+    }
+
+    private boolean hasNoDialogs() {
+        return !mResetDialog.isVisible() && !mQuitDialog.isVisible()
+                && !mSuccessDialog.isVisible() && !mFailDialog.isVisible();
     }
 
     @Override

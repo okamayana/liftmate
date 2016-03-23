@@ -41,33 +41,6 @@
         android:scrollingCache="false"/>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/workout_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/connection_status"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        app:cardBackgroundColor="@color/colorPrimary"
-        app:cardUseCompatPadding="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:text="Workout History"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
         android:id="@+id/connection_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

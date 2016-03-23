@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.ui.adapters.TimeTrialPagerAdapter;
+import com.github.okamayana.liftmate.ui.fragments.TimeTrialWorkoutFragment;
 
 public class TimeTrialActivity extends AppCompatActivity implements OnTabSelectedListener {
 
@@ -36,6 +37,7 @@ public class TimeTrialActivity extends AppCompatActivity implements OnTabSelecte
     }
 
     private ViewPager mViewPager;
+    private TimeTrialPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +64,22 @@ public class TimeTrialActivity extends AppCompatActivity implements OnTabSelecte
         int targetMinsPerSet = intent.getIntExtra(EXTRA_TARGET_MINS_PER_SET, 0);
         int targetSecsPerSet = intent.getIntExtra(EXTRA_TARGET_SECS_PER_SET, 0);
 
-        TimeTrialPagerAdapter pagerAdapter = new TimeTrialPagerAdapter(fm, targetSets, targetReps,
+        mPagerAdapter = new TimeTrialPagerAdapter(fm, targetSets, targetReps,
                 targetMinsPerSet, targetSecsPerSet, device);
-        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);
 
         mViewPager.addOnPageChangeListener(new TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(TimeTrialActivity.this);
         mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        OnBackPressedListener listener = (OnBackPressedListener) mPagerAdapter.getItem(0);
+
+        if (listener != null) {
+            listener.onBackPressed();
+        }
     }
 
     @Override
@@ -81,4 +92,10 @@ public class TimeTrialActivity extends AppCompatActivity implements OnTabSelecte
 
     @Override
     public void onTabReselected(Tab tab) {}
+
+
+    public interface OnBackPressedListener {
+
+        void onBackPressed();
+    }
 }

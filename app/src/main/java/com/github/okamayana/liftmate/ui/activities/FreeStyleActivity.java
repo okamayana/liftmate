@@ -23,9 +23,11 @@ import com.github.okamayana.liftmate.R;
 import com.github.okamayana.liftmate.net.BluetoothThread;
 import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadHandler;
 import com.github.okamayana.liftmate.net.BluetoothThread.BluetoothThreadListener;
+import com.github.okamayana.liftmate.ui.fragments.ConfirmationDialogFragment;
+import com.github.okamayana.liftmate.ui.fragments.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 
 public class FreeStyleActivity extends AppCompatActivity implements BluetoothThreadListener,
-        OnClickListener, OnSeekBarChangeListener {
+        OnClickListener, OnSeekBarChangeListener, ConfirmationDialogFragmentListener {
 
     public static final String EXTRA_BLUETOOTH_DEVICE = "extra_bluetooth_device";
 
@@ -52,6 +54,14 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
 
     private boolean mPaused = false;
     private boolean mStarted = false;
+
+    private String mResetDialogTitle = "Confirm workout reset";
+    private String mResetDialogText = "Are you sure you want to reset your workout? This will erase all workout progress.";
+    private ConfirmationDialogFragment mResetDialog;
+
+    private String mDoneDialogTitle = "Confirm workout exit";
+    private String mDoneDialogText = "Are you sure you want to leave your workout? This will erase all workout progress.";
+    private ConfirmationDialogFragment mDoneDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +100,12 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
         mRepCount = 0;
         mTimePaused = 0;
 
+        mResetDialog = new ConfirmationDialogFragment();
+        setupSimpleConfirmationDialog(mResetDialog, mResetDialogTitle, mResetDialogText);
+
+        mDoneDialog = new ConfirmationDialogFragment();
+        setupSimpleConfirmationDialog(mDoneDialog, mDoneDialogTitle, mDoneDialogText);
+
         new Thread(mBluetoothThread).start();
     }
 
@@ -116,10 +132,29 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
     }
 
     @Override
+    public void onConfirm(ConfirmationDialogFragment dialog) {
+        String title = dialog.getDialogTitle();
+
+        if (mResetDialogTitle.equals(title)) {
+            resetWorkout();
+        } else if (mDoneDialogTitle.equals(title)) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onCancel(ConfirmationDialogFragment dialog) {}
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_reset:
-                resetWorkout();
+                if (mStarted) {
+                    showConfirmationDialog(mResetDialog);
+                    if (!mPaused) {
+                        pauseWorkout();
+                    }
+                }
                 break;
 
             case R.id.btn_play_pause:
@@ -135,7 +170,21 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
                 break;
 
             case R.id.btn_done:
+                showConfirmationDialog(mDoneDialog);
+                if (mStarted && !mPaused) {
+                    pauseWorkout();
+                }
                 break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (hasNoDialogs()) {
+            showConfirmationDialog(mDoneDialog);
+            if (mStarted && !mPaused) {
+                pauseWorkout();
+            }
         }
     }
 
@@ -188,6 +237,25 @@ public class FreeStyleActivity extends AppCompatActivity implements BluetoothThr
         }
     }
 
+    private void setupSimpleConfirmationDialog(ConfirmationDialogFragment dialog,
+                                               String dialogTitle, String dialogText) {
+        dialog.setHasCancel(true);
+        dialog.setOnConfirmationDialogFragmentListener(FreeStyleActivity.this);
+        dialog.setDialogTitle(dialogTitle);
+        dialog.setDialogText(dialogText);
+    }
+
+    public void showConfirmationDialog(ConfirmationDialogFragment dialog) {
+        if (!dialog.isAdded()) {
+            dialog.show(getSupportFragmentManager(), null);
+        }
+    }
+
+    private boolean hasNoDialogs() {
+        return !mDoneDialog.isVisible() && !mResetDialog.isVisible();
+    }
+
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 }

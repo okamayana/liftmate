@@ -32,6 +32,7 @@ public class ConfirmationDialogFragment extends AppCompatDialogFragment
         super.onCreate(savedInstanceState);
 
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        setCancelable(false);
     }
 
     @Nullable
