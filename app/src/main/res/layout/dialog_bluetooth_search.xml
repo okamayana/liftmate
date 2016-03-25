@@ -79,6 +79,7 @@
         android:enabled="false"
         android:padding="16dp"
         android:text="Refresh"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:theme="@style/LiftmateButton"/>
 
 </RelativeLayout>
